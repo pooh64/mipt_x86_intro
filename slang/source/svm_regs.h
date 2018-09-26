@@ -1,0 +1,9 @@
+REG(IP)
+REG(SS)
+REG(SP)
+REG(BP)
+
+REG(AX)
+REG(BX)
+REG(CX)
+REG(DX)

@@ -1,0 +1,5 @@
+#!/bin/bash
+nasm -f elf64 -o _printf.o _printf.asm
+gcc -c main.c -o main.o
+gcc -o callprintf _printf.o main.o
+./callprintf

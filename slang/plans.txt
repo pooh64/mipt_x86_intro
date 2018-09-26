@@ -1,0 +1,6 @@
+/**
+    Targets for project:
+	1. make svm that uses regs like jit
+	2. make push [bp + 16] addr or use other reg like tmpval
+   	3. terminal i/o       		
+*/

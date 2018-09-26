@@ -1,0 +1,208 @@
+How to assemble sasm-file?
+	make sasm (Makefile)
+	Put sasm.txt into ./debug/test
+	Run sasm in debug folder
+	
+How to execute code.x64?
+1)
+	make exec_mmap (Makefile)
+	Put code.x64 into ./debug/test
+	Run exec_mmap in debug folder
+2)
+	make exec
+	Now you can run exec without any files 
+	(needs recompile if you changed code.x64)
+
+
+	
+
+________SASM____:
+
+____Syntax:
+	Numbers must be written in c-like format (man strtod)
+	Label syntax: 
+		label_name:
+	Only isalnum() or '_' can be used in name
+
+
+____Stack:
+	x64-like stack, rsp - stack poiner
+
+
+
+____Registers:
+	rax, rbx, rcx, rdx, rsi, rsi, rbp, rsp.
+	rsp - stack pointer
+	rbp - recommended for use in proc (getrsp, setrsp)
+	r8, r9 used by some cmds, unaviable for use.
+	rdx keeps result of arg1%arg2 after div.
+	64-bit only.
+
+
+____Commands:
+
+Stack:
+push:
+	Syntax:
+	push dword      	-> pushq
+	push r64		-> pushr
+	push [r64]		-> pushm
+	push [r64 + dword]	-> pushm
+pop:
+	pop r64			-> popr
+	pop [r64]		-> popm 
+	pop [r64 + dword]	-> popm	
+getrsp:
+	Moves value of rsp to rbp.
+setrsp:
+	Moves values of rbp to rsp.
+	
+	
+Arithmetics:
+	Qword arithm. commands.
+Example:
+	push arg1
+	push arg2
+	arithm_cmd
+	pop arg3
+add:
+	Pops two last elems of stack and pushes their sum into stack.
+	arg3 = arg1 + arg2
+sub:
+	Add-like:
+	arg3 = arg1 - arg2
+mul:
+	Add-like:
+	arg3 = arg1 * arg2
+div:
+	Add-like:
+	arg3 = arg1 / arg2
+div: Note: rdx = arg1 % arg2
+
+
+Stack frame:
+
+call:
+	Syntax: call label_name
+	Save next cmd addr and jump to label_name
+	
+ret:
+	Pop retaddr from stack and jmp to it's value
+	
+	
+Jumps:
+	Syntax: cmd label_name
+jmp:
+	jump to the given label
+	
+Conditional jumps:
+	Remove two last elems of stack and compare their values:
+Example:
+	push arg1
+	push arg2
+	cmd label_name
+
+je: 	if arg1 == arg2
+jne:    if arg1 != arg2
+jg: 	if arg1 > arg2
+jge: 	if arg1 >= arg2
+jle: 	if arg1 <= arg2
+
+
+
+
+____Directives:
+
+.incbin:
+	Use it to paste binary (x64)
+	file into the assembled code.
+Example:
+...
+call __func
+...
+__func:
+.incbin "./folder1/folder2/x64_func_file"
+...
+
+
+
+____How to write code:
+
+Sdecl:
+	Recommended function-write style for sasm. (Slang too)
+Example:
+	// local_value = func(arg1, arg2, arg3)
+	push arg3
+	push arg2
+	push arg1
+	
+	call func
+	pop rbx
+	pop rbx
+	pop rbx (or push rsp \ push 24 \ sub \ pop rsp)
+	
+	push rax
+	pop [rbp + local_val_offs]
+	...
+func:
+	push rbp
+	getrsp
+	// arg1 = [rbp + 16]
+	// arg2 = [rbp + 24] ...
+	...
+	pop rax
+	setrsp
+	pop rbp
+	ret
+	
+Another example:
+	// local_value = sum(narg, ...)
+	push argn
+	...
+	push arg1
+	push narg
+	
+	call func
+	
+	push rsp
+	push 8 * (narg + 1)
+	sub
+	pop rsp
+
+
+
+
+____x64lib:
+
+Sasm .incbin library (sasm/x64lib, nasm format).
+Sources:   sasm/x64lib
+x64-files: debug/x64lib
+Warning: rcx and r11 are unsafe to use with syscall
+You can provide your own binaries:
+	Add nasm-format file into sasm/x64lib
+	Add your file to x64lib target (Makefile)
+In future i want to add float add, sub, mul, div and i/o
+with xmm registers.
+
+Provided functions:
+
+inp:
+	Gets decimal qword from stdin.
+	Returns it's value in rax.
+	Saves all other registers.
+	Uses sys_read.
+	
+out:
+	Prints decimal qword to stdout.
+	Arg in stack.
+	Saves all registers, rax untouched.
+	Uses sys_write.
+	
+Example:
+	...
+	call __inp
+	push rax
+	...
+	__inp:
+	.incbin "../x64lib/inp.x64"
+	

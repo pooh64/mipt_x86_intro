@@ -1,0 +1,6 @@
+SASM_OP(label, ':',)
+SASM_OP(sqbro, '[',)
+SASM_OP(sqbrc, ']', )
+SASM_OP(plus, '+', )
+SASM_OP(minus, '-', )
+SASM_OP(comma, ',', )

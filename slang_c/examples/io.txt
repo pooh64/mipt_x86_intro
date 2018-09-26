@@ -1,0 +1,10 @@
+call __inp
+push rax
+call __out
+pop rax
+ret
+
+__inp:
+.incbin "./x64lib/inp.x64"
+__out:
+.incbin "./x64lib/out.x64"

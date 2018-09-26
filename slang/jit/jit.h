@@ -1,0 +1,17 @@
+unsigned char LOAD_RIP[] = "\x48\x8d\x0d\x00\x00\x00\x00\x48\x83\xe9\x07";
+
+unsigned char CMD_getrbp[] = "\x55\x48\x89\xe5\x48\x83\xc5\x10";
+unsigned char CMD_retrbp[] = "\x5d";
+
+unsigned char CMD_addq[] = "\x5b\x58\x48\x01\xd8\x50";
+unsigned char CMD_subq[] = "\x5b\x58\x48\x29\xd8\x50";
+unsigned char CMD_mulq[] = "\x5b\x58\x48\xf7\xe3\x50";
+unsigned char CMD_divq[] = "\x5b\x58\x48\xf7\xf3\x50";
+
+unsigned char CMD_jmp_1[] = "\x48\x89\xca\x48\x81\xc2";
+unsigned char CMD_jmp_2[] = "\xff\xe2";
+
+unsigned char CMD_call_1[] = "\x48\x89\xca\x48\x81\xc2";
+unsigned char CMD_call_2[] = "\xff\xd2";
+
+unsigned char CMD_cmp[] = "\x5b\x58\x48\x39\xd8";

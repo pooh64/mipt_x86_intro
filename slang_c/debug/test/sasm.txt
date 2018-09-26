@@ -1,0 +1,51 @@
+call __inp
+push 1
+push 0
+push rax
+call fib
+pop rbx
+pop rbx
+pop rbx
+ret
+
+
+fib:
+push rbp
+getrsp
+
+push [rbp + 16]
+push 1
+sub
+push 0
+jl end
+
+push [rbp + 24]
+push [rbp + 32]
+add
+pop rax
+
+push rax
+call __out
+pop rbx
+
+push rax
+push [rbp + 32]
+push [rbp + 16]
+push 1
+sub
+call fib
+pop rbx
+pop rbx
+pop rbx
+
+end:
+
+setrsp
+pop rbp
+ret
+
+
+__inp:
+.incbin "./x64lib/inp.x64"
+__out:
+.incbin "./x64lib/out.x64"

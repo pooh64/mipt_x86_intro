@@ -1,0 +1,55 @@
+	call __process_0
+	jmp __end
+
+
+__process_1:
+
+	getrbp
+	pushq [rbp]
+	pushq 2
+	jb __label_1
+	pushq 0
+	jmp __label_2
+
+__label_1:
+
+	pushq 1
+
+__label_2:
+
+	pushq 0
+	je __label_0
+	pushq 1
+	popq rax
+	retrbp
+	ret
+
+__label_0:
+
+	pushq [rbp]
+	pushq [rbp]
+	pushq 1
+	subq
+	call __process_1
+	popq rbx
+	pushq rax
+	mulq
+	popq rax
+	retrbp
+	ret
+
+
+__process_0:
+
+	getrbp
+	pushq 5
+	call __process_1
+	popq rbx
+	pushq rax
+	popq rax
+	retrbp
+	ret
+
+
+__end:
+ret

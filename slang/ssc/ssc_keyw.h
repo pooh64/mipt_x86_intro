@@ -1,0 +1,7 @@
+SSC_KEYW(char)
+SSC_KEYW(if)
+SSC_KEYW(long)
+SSC_KEYW(return)
+SSC_KEYW(while)
+SSC_KEYW(inqd)
+SSC_KEYW(outqd)

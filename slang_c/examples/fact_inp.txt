@@ -1,0 +1,39 @@
+call __inp
+push rax
+call fact
+pop rbx
+ret
+
+
+fact:
+push rbp
+getrsp
+
+push [rbp + 16]
+push 1
+jle fact_end
+
+push [rbp + 16]
+push 1
+sub
+call fact
+pop rbx
+
+push rax
+push [rbp + 16]
+mul
+pop rax
+setrsp
+pop rbp
+ret
+
+
+fact_end:
+push 1
+pop rax
+setrsp
+pop rbp
+ret
+
+__inp:
+.incbin "./x64lib/inp.x64"
